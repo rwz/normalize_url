@@ -1,4 +1,7 @@
 # NormalizeUrl
+[![Gem Version](https://img.shields.io/gem/v/normalize_url.svg)](https://rubygems.org/gems/normalize_url)
+[![Build Status](https://img.shields.io/travis/rwz/normalize_url.svg)](http://travis-ci.org/rwz/normalize_url)
+[![Code Climate](https://img.shields.io/codeclimate/github/rwz/normalize_url.svg)](https://codeclimate.com/github/rwz/normalize_url)
 
 This gem can normalize HTTP(S) URLs by applying a certain set of
 transformations. After normalization, two different URLs that point to the same
