@@ -7,6 +7,8 @@ module NormalizeUrl
     def initialize(original_uri, options={})
       @uri = Addressable::URI.parse(original_uri).normalize
       @options = options
+
+      check!
     end
 
     def normalize
@@ -41,6 +43,11 @@ module NormalizeUrl
 
     def process_remove_repeating_slashes
       uri.path = uri.path.squeeze(?/) if uri.host
+    end
+
+    def check!
+      fail ArgumentError, "only absolute URLs can be normalized" unless uri.absolute?
+      fail ArgumentError, "only HTTP/HTTPS URLs can be normalized" unless uri.scheme =~ /https?/
     end
   end
 end
