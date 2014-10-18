@@ -15,7 +15,7 @@ module NormalizeUrl
       awesm
       xtor
       PHPSESSID
-    ].to_set
+    ].to_set.freeze
 
     def initialize(original_uri, options={})
       @uri = Addressable::URI.parse(original_uri).normalize
