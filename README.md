@@ -48,7 +48,7 @@ Each tranformation could be skipped by demand. All you need is to pass it as a
 optional value to `normalize` method:
 
 ```ruby
-NormalizeUrl.normalize("http://example.com/foo/", remove_trailing_slash: false) # => "http://example.com/foo/"
+NormalizeUrl.process("http://example.com/foo/", remove_trailing_slash: false) # => "http://example.com/foo/"
 ```
 
 ## Transformations
