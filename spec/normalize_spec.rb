@@ -52,11 +52,23 @@ describe NormalizeUrl do
   end
 
   it "doesn't modify query params" do
-    expect(n("http://example.com/?foo=BAR+%26+BAZZ")).to eq("http://example.com/?foo=BAR+%26+BAZZ")
+    expect(n("http://example.com/?foo=BAR%26BAZZ")).to eq("http://example.com/?foo=BAR%26BAZZ")
   end
 
   it "skips sorting query when required" do
     expect(n("http://example.com/?b=bar&a=foo", sort_query: false)).to eq("http://example.com/?b=bar&a=foo")
+  end
+
+  it "removes tracking query params" do
+    expect(n("http://example.com/?utm_source=foo")).to eq("http://example.com/")
+    expect(n("http://example.com/?utm_medium=foo")).to eq("http://example.com/")
+    expect(n("http://example.com/?utm_term=foo")).to eq("http://example.com/")
+    expect(n("http://example.com/?utm_content=foo")).to eq("http://example.com/")
+    expect(n("http://example.com/?utm_campaign=foo")).to eq("http://example.com/")
+    expect(n("http://example.com/?sms_ss=foo")).to eq("http://example.com/")
+    expect(n("http://example.com/?awesm=foo")).to eq("http://example.com/")
+    expect(n("http://example.com/?xtor=foo")).to eq("http://example.com/")
+    expect(n("http://example.com/?PHPSESSID=foo")).to eq("http://example.com/")
   end
 
   it "removes repeating slashes in path" do

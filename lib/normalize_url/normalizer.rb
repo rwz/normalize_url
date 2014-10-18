@@ -1,8 +1,21 @@
+require "set"
 require "addressable/uri"
 
 module NormalizeUrl
   class Normalizer
     attr_reader :uri, :options
+
+    TRACKING_QUERY_PARAMS = %w[
+      utm_source
+      utm_medium
+      utm_term
+      utm_content
+      utm_campaign
+      sms_ss
+      awesm
+      xtor
+      PHPSESSID
+    ].to_set
 
     def initialize(original_uri, options={})
       @uri = Addressable::URI.parse(original_uri).normalize
@@ -17,6 +30,7 @@ module NormalizeUrl
       process :remove_trailing_slash
       process :remove_repeating_slashes
       process :remove_hash
+      process :remove_tracking
       process :sort_query
       uri.to_s
     end
@@ -45,6 +59,18 @@ module NormalizeUrl
 
     def process_remove_repeating_slashes
       uri.path = uri.path.squeeze(?/) if uri.host
+    end
+
+    def process_remove_tracking
+      return unless uri.query_values
+      original = uri.query_values
+      cleaned = original.reject{ |key, _| TRACKING_QUERY_PARAMS.include?(key) }
+
+      if cleaned.empty?
+        uri.query_values = nil
+      elsif cleaned != original
+        uri.query_values = cleaned
+      end
     end
 
     def fail_uri(message)
