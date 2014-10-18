@@ -21,6 +21,10 @@ describe NormalizeUrl do
     expect(n("http://www.詹姆斯.com/")).to eq("http://www.xn--8ws00zhy3a.com/")
   end
 
+  it "downcases host and scheme" do
+    expect(n("HTTP://EXAMPLE.COM/FOO")).to eq("http://example.com/FOO")
+  end
+
   it "normalizes dot-segments" do
     expect(n("http://example.com/foo/bar/../../")).to eq("http://example.com/")
   end
