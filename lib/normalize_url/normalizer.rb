@@ -31,6 +31,7 @@ module NormalizeUrl
       process :remove_repeating_slashes
       process :remove_hash
       process :remove_tracking
+      process :remove_params
       process :sort_query
       uri.to_s
     end
@@ -62,9 +63,17 @@ module NormalizeUrl
     end
 
     def process_remove_tracking
+      remove_params TRACKING_QUERY_PARAMS
+    end
+
+    def process_remove_params
+      remove_params Array(@options.fetch(:remove_params, nil)).map(&:to_s)
+    end
+
+    def remove_params(params)
       return unless uri.query_values
       original = uri.query_values
-      cleaned = original.reject{ |key, _| TRACKING_QUERY_PARAMS.include?(key) }
+      cleaned = original.reject{ |key, _| params.include?(key) }
 
       if cleaned.empty?
         uri.query_values = nil

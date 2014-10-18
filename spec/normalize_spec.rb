@@ -72,6 +72,11 @@ describe NormalizeUrl do
     expect(n("http://example.com/?a=a&xtor=foo&b=b")).to eq("http://example.com/?a=a&b=b")
   end
 
+  it "removes query params provided in options" do
+    expect(n("http://example.com/?a=a&xtor=foo&b=b&c=c", remove_params: :b)).to eq("http://example.com/?a=a&c=c")
+    expect(n("http://example.com/?a=a&xtor=foo&b=b&c=c", remove_params: ["b", :c])).to eq("http://example.com/?a=a")
+  end
+
   it "skips removing tracking params if required" do
     expect(n("http://example.com/?xtor=foo", remove_tracking: false)).to eq("http://example.com/?xtor=foo")
   end
