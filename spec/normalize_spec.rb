@@ -71,6 +71,10 @@ describe NormalizeUrl do
     expect(n("http://example.com/?PHPSESSID=foo")).to eq("http://example.com/")
   end
 
+  it "skips removing tracking params if required" do
+    expect(n("http://example.com/?xtor=foo", remove_tracking: false)).to eq("http://example.com/?xtor=foo")
+  end
+
   it "removes repeating slashes in path" do
     expect(n("http://example.com/foo///products")).to eq("http://example.com/foo/products")
   end
