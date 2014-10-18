@@ -7,8 +7,10 @@ module NormalizeUrl
     def initialize(original_uri, options={})
       @uri = Addressable::URI.parse(original_uri).normalize
       @options = options
-
-      check!
+      fail_uri "only absolute URLs can be normalized" unless uri.absolute?
+      fail_uri "only HTTP/HTTPS URLs can be normalized" unless uri.scheme =~ /https?/
+    rescue Addressable::URI::InvalidURIError
+      fail_uri "#{original_uri.inspect} is not a URL"
     end
 
     def normalize
@@ -45,9 +47,8 @@ module NormalizeUrl
       uri.path = uri.path.squeeze(?/) if uri.host
     end
 
-    def check!
-      fail ArgumentError, "only absolute URLs can be normalized" unless uri.absolute?
-      fail ArgumentError, "only HTTP/HTTPS URLs can be normalized" unless uri.scheme =~ /https?/
+    def fail_uri(message)
+      fail ArgumentError, message
     end
   end
 end
