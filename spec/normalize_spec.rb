@@ -69,6 +69,7 @@ describe NormalizeUrl do
     expect(n("http://example.com/?awesm=foo")).to eq("http://example.com/")
     expect(n("http://example.com/?xtor=foo")).to eq("http://example.com/")
     expect(n("http://example.com/?PHPSESSID=foo")).to eq("http://example.com/")
+    expect(n("http://example.com/?a=a&xtor=foo&b=b")).to eq("http://example.com/?a=a&b=b")
   end
 
   it "skips removing tracking params if required" do
