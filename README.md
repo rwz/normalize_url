@@ -10,11 +10,13 @@ resource should look exactly the same.
 For example:
 
 - `http://example.com/products`
+- `HTTP://EXAMPLE.COM/products/`
 - `http://example.com/products/`
 - `http://example.com/foo/../products`
 - `http://example.com/products#comments-section`
 - `http://example.com//products/`
 - `http://example.com/products?`
+- `http://example.com/products?utm_source=whatever`
 
 will all become `http://example.com/products` after normalization.
 
@@ -70,6 +72,12 @@ NormalizeUrl.process("http://example.com/foo/", remove_trailing_slash: false) # 
     Example:
 
     `http://example.com/foo#bar` -> `http://example.com/foo`
+
+- Remove tracking. Option `:remove_tracking`.
+
+    Example:
+
+    `http://example.com/?utm_source=whatever` -> `http://example.com/`
 
 - Sort query string. Option `:sort_query`.
 
