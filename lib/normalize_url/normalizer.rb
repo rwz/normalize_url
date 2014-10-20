@@ -30,6 +30,7 @@ module NormalizeUrl
       process :remove_trailing_slash
       process :remove_repeating_slashes
       process :remove_hash
+      process :reparse_query
       process :remove_tracking
       process :remove_params
       process :sort_query
@@ -68,6 +69,10 @@ module NormalizeUrl
 
     def process_remove_params
       remove_params Array(@options.fetch(:remove_params, nil)).map(&:to_s)
+    end
+
+    def process_reparse_query
+      uri.query_values = uri.query_values.to_a
     end
 
     def remove_params(params)

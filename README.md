@@ -9,16 +9,16 @@ resource should look exactly the same.
 
 For example:
 
-- `http://example.com/products`
-- `HTTP://EXAMPLE.COM/products/`
-- `http://example.com/products/`
-- `http://example.com/foo/../products`
-- `http://example.com/products#comments-section`
-- `http://example.com//products/`
-- `http://example.com/products?`
-- `http://example.com/products?utm_source=whatever`
+- `http://example.com/products?product_id=123`
+- `HTTP://EXAMPLE.COM/products/?product_id=123`
+- `http://example.com/products/?product_id=123`
+- `http://example.com/foo/../products?product_id=123`
+- `http://example.com/products?product_id=123#comments-section`
+- `http://example.com//products/?product_id=123`
+- `http://example.com//products/?product_id=123&`
+- `http://example.com/products?utm_source=whatever&product_id=123&utm_medium=twitter&utm_campaign=blah`
 
-will all become `http://example.com/products` after normalization.
+will all become `http://example.com/products?product_id=123` after normalization.
 
 Some of the transformations are potentially dangerous, since not all webservers
 comform to standards and some of them are just plain weird. So there is no
@@ -55,13 +55,13 @@ NormalizeUrl.process("http://example.com/foo/", remove_trailing_slash: false) # 
 
 ## Transformations
 
-- Remove trailing slash. Option `:remove_trailing_slash`
+- Remove trailing slash. Option `:remove_trailing_slash`.
 
     Example:
 
     `http://example.com/products/` -> `http://example.com/products`
 
-- Remove repeating slashes. Option `:remove_repeating_slashes`
+- Remove repeating slashes. Option `:remove_repeating_slashes`.
 
     Example:
 
@@ -73,7 +73,13 @@ NormalizeUrl.process("http://example.com/foo/", remove_trailing_slash: false) # 
 
     `http://example.com/foo#bar` -> `http://example.com/foo`
 
-- Remove tracking. Option `:remove_tracking`.
+- Reparse query params. Option `:reparse_query`.
+
+    Example:
+
+    `http://example.com/?foo=BAR+BAZ` -> `http://example.com/?foo=BAR%20BAZ`
+
+- Remove known commonly used tracking query parameters. Option `:remove_tracking`.
 
     Example:
 
