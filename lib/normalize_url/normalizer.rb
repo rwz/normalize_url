@@ -44,7 +44,7 @@ module NormalizeUrl
     end
 
     def process?(step)
-      @options.fetch(step, true)
+      options.fetch(step, true)
     end
 
     def process_remove_trailing_slash
@@ -68,7 +68,7 @@ module NormalizeUrl
     end
 
     def process_remove_params
-      remove_params Array(@options.fetch(:remove_params, nil)).map(&:to_s)
+      remove_params Array(options.fetch(:remove_params, nil)).map(&:to_s)
     end
 
     def process_reparse_query
