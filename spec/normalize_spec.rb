@@ -35,6 +35,11 @@ describe NormalizeUrl do
     expect(n("http://example.com/foo/bar/../../")).to eq("http://example.com/")
   end
 
+  it "noemalizes query params" do
+    expect(n("http://example.com/?foo=BAR+BAZ")).to eq("http://example.com/?foo=BAR%20BAZ")
+  end
+
+
   it "strips trailing slash" do
     expect(n("http://example.com/products/")).to eq("http://example.com/products")
   end
@@ -45,14 +50,6 @@ describe NormalizeUrl do
 
   it "removes empty query" do
     expect(n("http://example.com/?")).to eq("http://example.com/")
-  end
-
-  it "reparses query params" do
-    expect(n("http://example.com/?foo=BAR+BAZ")).to eq("http://example.com/?foo=BAR%20BAZ")
-  end
-
-  it "skips query reparsing when required" do
-    expect(n("http://example.com/?foo=BAR+BAZ", reparse_query: false)).to eq("http://example.com/?foo=BAR+BAZ")
   end
 
   it "sorts query params" do

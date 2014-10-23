@@ -15,7 +15,7 @@ For example:
 - `http://example.com/foo/../products?product_id=123`
 - `http://example.com/products?product_id=123#comments-section`
 - `http://example.com//products/?product_id=123`
-- `http://example.com//products/?product_id=123&`
+- `http://example.com/products/?product_id=123&`
 - `http://example.com/products?utm_source=whatever&product_id=123&utm_medium=twitter&utm_campaign=blah`
 
 will all become `http://example.com/products?product_id=123` after normalization.
@@ -46,10 +46,11 @@ Or install it yourself as:
 NormalizeUrl.process("http://example.com/products/?foo=bar&baz") # => "http://example.com/products?baz&foo=bar"
 ```
 
-Each tranformation could be skipped by demand. All you need is to pass it as a
-optional value to `normalize` method:
+Some tranformations could be skipped by demand. All you need is to pass its
+name as a optional value to `normalize` method:
 
 ```ruby
+NormalizeUrl.process("http://example.com/foo/") # => "http://example.com/foo"
 NormalizeUrl.process("http://example.com/foo/", remove_trailing_slash: false) # => "http://example.com/foo/"
 ```
 
@@ -72,12 +73,6 @@ NormalizeUrl.process("http://example.com/foo/", remove_trailing_slash: false) # 
     Example:
 
     `http://example.com/foo#bar` -> `http://example.com/foo`
-
-- Reparse query params. Option `:reparse_query`.
-
-    Example:
-
-    `http://example.com/?foo=BAR+BAZ` -> `http://example.com/?foo=BAR%20BAZ`
 
 - Remove known commonly used tracking query parameters. Option `:remove_tracking`.
 

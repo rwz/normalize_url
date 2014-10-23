@@ -30,10 +30,7 @@ module NormalizeUrl
       process :remove_trailing_slash
       process :remove_repeating_slashes
       process :remove_hash
-      process :reparse_query
-      process :remove_tracking
-      process :remove_params
-      process :sort_query
+      process_query
       uri.to_s
     end
 
@@ -41,6 +38,17 @@ module NormalizeUrl
 
     def process(step)
       send "process_#{step}" if process?(step)
+    end
+
+    def process_query
+      query_values = uri.query_values
+      return if query_values.nil?
+
+      query_values = remove_params(query_values, TRACKING_QUERY_PARAMS) if process?(:remove_tracking)
+      query_values = remove_params(query_values, params_to_remove) if process?(:remove_params)
+      query_values = query_values.to_a unless process?(:sort_query)
+
+      uri.query_values = query_values.empty? ? nil : query_values
     end
 
     def process?(step)
@@ -51,10 +59,6 @@ module NormalizeUrl
       uri.path = uri.path.chomp(?/) unless uri.path == ?/
     end
 
-    def process_sort_query
-      uri.query = uri.query.split(?&).sort.join(?&) if uri.query
-    end
-
     def process_remove_hash
       uri.fragment = nil
     end
@@ -63,32 +67,16 @@ module NormalizeUrl
       uri.path = uri.path.squeeze(?/) if uri.host
     end
 
-    def process_remove_tracking
-      remove_params TRACKING_QUERY_PARAMS
-    end
-
-    def process_remove_params
-      remove_params Array(options.fetch(:remove_params, nil)).map(&:to_s)
-    end
-
-    def process_reparse_query
-      uri.query_values = uri.query_values.to_a
-    end
-
-    def remove_params(params)
-      return unless uri.query_values
-      original = uri.query_values
-      cleaned = original.reject{ |key, _| params.include?(key) }
-
-      if cleaned.empty?
-        uri.query_values = nil
-      elsif cleaned != original
-        uri.query_values = cleaned
-      end
+    def remove_params(query_values, params)
+      query_values.reject{ |key, _| params.include?(key) }
     end
 
     def fail_uri(message)
       fail ArgumentError, message
+    end
+
+    def params_to_remove
+      Array(options.fetch(:remove_params, nil)).map(&:to_s)
     end
   end
 end
