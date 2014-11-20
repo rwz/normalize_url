@@ -5,22 +5,22 @@ describe NormalizeUrl do
     described_class.process(*args)
   end
 
-  it "raises ArgumentError when input is not an URL" do
+  it "raises NormalizeUrl::InvalidURIError when input is not an URL" do
     action = ->{ n("http://") }
     message = %{"http://" is not a URL}
-    expect(&action).to raise_error(ArgumentError, message)
+    expect(&action).to raise_error(described_class::InvalidURIError, message)
   end
 
-  it "raises ArgumentError when input is not an abolute URL" do
+  it "raises NormalizeUrl::InvalidURIError when input is not an abolute URL" do
     action = ->{ n("not@url") }
     message = "only absolute URLs can be normalized"
-    expect(&action).to raise_error(ArgumentError, message)
+    expect(&action).to raise_error(described_class::InvalidURIError, message)
   end
 
-  it "raises ArgumentError when input is not an HTTP(S) URL" do
+  it "raises NormalizeUrl::InvalidURIError when input is not an HTTP(S) URL" do
     action = ->{ n("ftp://example.com") }
     message = "only HTTP/HTTPS URLs can be normalized"
-    expect(&action).to raise_error(ArgumentError, message)
+    expect(&action).to raise_error(described_class::InvalidURIError, message)
   end
 
   it "normalizes punycode" do

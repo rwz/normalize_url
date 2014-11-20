@@ -72,7 +72,7 @@ module NormalizeUrl
     end
 
     def fail_uri(message)
-      fail ArgumentError, message
+      fail InvalidURIError, message
     end
 
     def params_to_remove
