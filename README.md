@@ -22,7 +22,7 @@ will all become `http://example.com/products?product_id=123` after normalization
 
 Some of the transformations are potentially dangerous, since not all webservers
 comform to standards and some of them are just plain weird. So there is no
-gurantee that the URL will still work.
+guarantee that the URL will still work.
 
 ## Installation
 
